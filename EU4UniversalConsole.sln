@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EU4UniversalConsole", "EU4UniversalConsole\EU4UniversalConsole.vcxproj", "{148C2220-2F20-4ECA-B117-AE37352CC210}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EU4ConsoleInjector", "EU4ConsoleInjector\EU4ConsoleInjector.vcxproj", "{35B5BD38-F241-43AA-B55C-35D4EA1036DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{148C2220-2F20-4ECA-B117-AE37352CC210}.Debug|x64.ActiveCfg = Debug|x64
+		{148C2220-2F20-4ECA-B117-AE37352CC210}.Debug|x64.Build.0 = Debug|x64
+		{148C2220-2F20-4ECA-B117-AE37352CC210}.Release|x64.ActiveCfg = Release|x64
+		{148C2220-2F20-4ECA-B117-AE37352CC210}.Release|x64.Build.0 = Release|x64
+		{35B5BD38-F241-43AA-B55C-35D4EA1036DB}.Debug|x64.ActiveCfg = Debug|x64
+		{35B5BD38-F241-43AA-B55C-35D4EA1036DB}.Debug|x64.Build.0 = Debug|x64
+		{35B5BD38-F241-43AA-B55C-35D4EA1036DB}.Release|x64.ActiveCfg = Release|x64
+		{35B5BD38-F241-43AA-B55C-35D4EA1036DB}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {762C2AE1-2A1B-4342-B4B0-6EEC845F00AB}
+	EndGlobalSection
+EndGlobal
