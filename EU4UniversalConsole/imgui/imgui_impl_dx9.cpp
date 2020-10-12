@@ -47,14 +47,14 @@ struct CUSTOMVERTEX
 
 static void ImGui_ImplDX9_SetupRenderState(ImDrawData* draw_data)
 {
-    // Setup viewport
-    D3DVIEWPORT9 vp;
+    // Setup viewport [disabled due to issues with duplicated rendering]
+    /*D3DVIEWPORT9 vp;
     vp.X = vp.Y = 0;
     vp.Width = (DWORD)draw_data->DisplaySize.x;
     vp.Height = (DWORD)draw_data->DisplaySize.y;
     vp.MinZ = 0.0f;
     vp.MaxZ = 1.0f;
-    g_pd3dDevice->SetViewport(&vp);
+    g_pd3dDevice->SetViewport(&vp);*/
 
     // Setup render state: fixed-pipeline, alpha-blending, no face culling, no depth testing, shade mode (for gradient)
     g_pd3dDevice->SetPixelShader(NULL);
@@ -107,6 +107,12 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
 {
     // Avoid rendering when minimized
     if (draw_data->DisplaySize.x <= 0.0f || draw_data->DisplaySize.y <= 0.0f)
+        return;
+
+    // Avoid rendering in "child" windows
+    D3DVIEWPORT9 vp;
+    g_pd3dDevice->GetViewport(&vp);
+    if (vp.Width != (DWORD)draw_data->DisplaySize.x || vp.Height != (DWORD)draw_data->DisplaySize.y)
         return;
 
     // Create and grow buffers if needed
