@@ -18,6 +18,9 @@
     <Filter Include="Header Files\EU4Classes">
       <UniqueIdentifier>{7efa0d28-57cf-4e90-a8a6-dee88d6bf294}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\EU4Classes">
+      <UniqueIdentifier>{eefc3d34-c9c6-4482-8c85-e0e506e75b7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -52,6 +55,12 @@
     </ClCompile>
     <ClCompile Include="UIConsole.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandExecutor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CString.cpp">
+      <Filter>Source Files\EU4Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +102,15 @@
     </ClInclude>
     <ClInclude Include="UIConsole.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandExecutor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CStringArray.h">
+      <Filter>Header Files\EU4Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="CString.h">
+      <Filter>Header Files\EU4Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
