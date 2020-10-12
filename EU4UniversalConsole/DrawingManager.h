@@ -12,4 +12,6 @@ namespace DrawingManager {
 	void RenderOverlay();
 
 	bool WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* lResultPtr);
+
+	extern bool inputBlocked;
 }

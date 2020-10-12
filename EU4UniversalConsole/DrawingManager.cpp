@@ -8,6 +8,8 @@
 static bool menuEnabled;
 static bool isDestroying;
 
+bool DrawingManager::inputBlocked = true;
+
 void DrawingManager::Initialize(IDirect3DDevice9* device)
 {
 	ImGui::CreateContext();
@@ -67,6 +69,13 @@ bool DrawingManager::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	if (imGuiResult)
 	{
 		*lResultPtr = imGuiResult;
+		return true;
+	}
+
+	// block game input while in menu
+	if (menuEnabled && DrawingManager::inputBlocked && (uMsg == WM_CHAR || uMsg == WM_KEYDOWN || uMsg == WM_KEYUP || uMsg == WM_SYSKEYDOWN || uMsg == WM_SYSKEYUP || uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP || uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP || uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP || uMsg == WM_MOUSEWHEEL || uMsg == WM_MOUSEMOVE))
+	{
+		*lResultPtr = 0;
 		return true;
 	}
 
