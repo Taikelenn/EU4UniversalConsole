@@ -8,4 +8,7 @@ namespace HookManager {
 
 	// Removes hooks placed by InstallHooks().
 	void UninstallHooks(HWND hwnd);
+
+	// A handle to an unnamed event. When signaled, the main DLL thread (InitThread) unloads the console.
+	extern HANDLE hUnloadEvent;
 }

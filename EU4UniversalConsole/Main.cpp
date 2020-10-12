@@ -10,12 +10,20 @@ DWORD CALLBACK InitThread(LPVOID lpParameter)
 	UNREFERENCED_PARAMETER(lpParameter);
 	
 	HWND windowHandle = nullptr;
-	while ((windowHandle = EU4Offsets::GetWindowHandle()) != nullptr)
+	while ((windowHandle = EU4Offsets::GetWindowHandle()) == nullptr)
 	{
 		Sleep(200);
 	}
 
 	HookManager::InstallHooks(windowHandle);
+
+	// a beep to signal that injection has finished
+	Beep(777, 100);
+
+	if (WaitForSingleObject(HookManager::hUnloadEvent, INFINITE) == WAIT_OBJECT_0)
+	{
+		HookManager::UninstallHooks(windowHandle);
+	}
 
 	return ERROR_SUCCESS;
 }
