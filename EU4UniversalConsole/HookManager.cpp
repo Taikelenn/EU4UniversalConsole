@@ -1,5 +1,6 @@
 #include "HookManager.h"
 #include "EU4Offsets.h"
+#include "CommandExecutor.h"
 
 #include "GfxMasterContextGFX.h"
 #include "DrawingManager.h"
@@ -47,7 +48,10 @@ void hookedEndScene(GfxMasterContextGFX* ctx)
 
 void hookedGameIdle()
 {
-	
+	if (CommandExecutor::commandScheduled)
+	{
+		CommandExecutor::ExecuteScheduledCommand();
+	}
 }
 
 bool hasHookedWndProc;

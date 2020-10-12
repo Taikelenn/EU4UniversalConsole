@@ -16,4 +16,7 @@ public:
 
 namespace CommandExecutor {
 	void ExecuteCommand(const std::string& command, UIConsole* console);
+	void ExecuteScheduledCommand();
+
+	extern bool commandScheduled;
 }

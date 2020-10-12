@@ -3,6 +3,8 @@
 
 #include "EU4Offsets.h"
 
+bool CommandExecutor::commandScheduled = false;
+
 CStringArray* SplitString(const std::string& arguments)
 {
     std::string currentEntry = "";
@@ -32,7 +34,21 @@ CStringArray* SplitString(const std::string& arguments)
     return new CStringArray(splitArgs);
 }
 
-bool ExecuteCommandInternal(const std::string& command, std::string& resultMsg)
+CommandFunction_t scheduledCommand_func;
+CStringArray* scheduledCommand_args;
+
+void CommandExecutor::ExecuteScheduledCommand()
+{
+    if (CommandExecutor::commandScheduled)
+    {
+        CCommandResult cmdResult;
+        CCommandResult* cmdResult2 = scheduledCommand_func(&cmdResult, scheduledCommand_args);
+
+        CommandExecutor::commandScheduled = false;
+    }
+}
+
+void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* console)
 {
     std::string commandVerb = command;
     std::string argumentString = "";
@@ -51,27 +67,12 @@ bool ExecuteCommandInternal(const std::string& command, std::string& resultMsg)
     {
         std::ptrdiff_t eventFunc = 0xbca9f0; // this offset is not in the EU4Offsets namespace because it is temporary and will be removed
 
-        CommandFunction_t cmd = (CommandFunction_t)EU4Offsets::TranslateOffset(eventFunc);
-        CCommandResult cmdResult;
-        CCommandResult* cmdResult2 = cmd(&cmdResult, arguments);
+        scheduledCommand_func = (CommandFunction_t)EU4Offsets::TranslateOffset(eventFunc);
+        scheduledCommand_args = arguments;
+        commandScheduled = true;
     }
     else
     {
-        resultMsg = "Command not recognized.";
-    }
-
-    return false;
-}
-
-void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* console)
-{
-    std::string result;
-    if (ExecuteCommandInternal(command, result))
-    {
-        // append the result
-    }
-    else
-    {
-        // append the result as an error
+        
     }
 }
