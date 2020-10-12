@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DrawingManager.cpp" />
+    <ClCompile Include="DrawOverlay.cpp" />
     <ClCompile Include="HookManager.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />

@@ -7,5 +7,7 @@ namespace DrawingManager {
 	void Initialize(IDirect3DDevice9* device);
 	void RenderFrame(IDirect3DDevice9* device);
 
+	void RenderOverlay();
+
 	bool WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* lResultPtr);
 }
