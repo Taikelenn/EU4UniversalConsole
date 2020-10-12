@@ -1,4 +1,5 @@
 #include "UIConsole.h"
+#include "CommandExecutor.h"
 
 #include <cstring>
 
@@ -8,6 +9,11 @@ UIConsole::UIConsole()
     historyPosition = -1;
 
     consoleData.push_back(std::make_pair("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f)));
+}
+
+void UIConsole::ExecuteCommand(const std::string& command)
+{
+    CommandExecutor::ExecuteCommand(command, this);
 }
 
 int UIConsole::InputCallbackInternal(ImGuiInputTextCallbackData* data)
@@ -101,8 +107,12 @@ void UIConsole::Render()
         // if the command was not empty, execute it
         if (commandBuffer[0])
         {
-            historicalEntries.push_back(commandBuffer);
-            consoleData.push_back(std::make_pair("# " + std::string(commandBuffer), ImColor(0.0f, 1.0f, 1.0f)));
+            std::string cmdString = commandBuffer;
+
+            historicalEntries.push_back(cmdString);
+            consoleData.push_back(std::make_pair("# " + cmdString, ImColor(0.0f, 1.0f, 1.0f)));
+
+            this->ExecuteCommand(cmdString);
         }
 
         // clear the command input box and reset history state

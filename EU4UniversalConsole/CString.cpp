@@ -5,6 +5,12 @@
 CString::CString(const std::string& s)
 {
 	// we mirror the EU4's way of allocating memory (which is internally calling HeapAlloc, though this might just as well be the msvcrt's default way of allocating memory)
+	if (s.empty())
+	{
+		this->size = 0;
+		this->allocSize = 15;
+	}
+
 	if (s.size() < 0x10)
 	{
 		strcpy((char*)this->buf, s.c_str());

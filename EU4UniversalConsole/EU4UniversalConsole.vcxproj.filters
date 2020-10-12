@@ -62,6 +62,9 @@
     <ClCompile Include="CString.cpp">
       <Filter>Source Files\EU4Classes</Filter>
     </ClCompile>
+    <ClCompile Include="CStringArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EU4Offsets.h">

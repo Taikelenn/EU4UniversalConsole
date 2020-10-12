@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="CommandExecutor.cpp" />
     <ClCompile Include="CString.cpp" />
+    <ClCompile Include="CStringArray.cpp" />
     <ClCompile Include="DrawingManager.cpp" />
     <ClCompile Include="DrawOverlay.cpp" />
     <ClCompile Include="HookManager.cpp" />

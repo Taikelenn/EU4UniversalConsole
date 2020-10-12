@@ -15,8 +15,11 @@ private:
 	size_t allocSize;
 
 public:
+	CString() : CString("") { }
 	CString(const std::string& s);
 
 	inline const char* GetData() { if (size >= 0x10) return ptr; return (const char*)buf; }
 	inline size_t GetSize() { return size; }
+
+	inline std::string ToString() { return std::string(this->GetData(), this->GetData() + this->GetSize()); }
 };

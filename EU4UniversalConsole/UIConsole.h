@@ -14,8 +14,8 @@ private:
 
 	std::vector<std::pair<std::string, ImColor>> consoleData;
 
+	void ExecuteCommand(const std::string& command);
 	int InputCallbackInternal(ImGuiInputTextCallbackData* data);
-
 public:
 	UIConsole();
 

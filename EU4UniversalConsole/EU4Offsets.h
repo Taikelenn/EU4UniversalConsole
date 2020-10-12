@@ -5,6 +5,11 @@
 
 #include <Windows.h>
 
+class CCommandResult;
+class CStringArray;
+
+typedef CCommandResult* (*CommandFunction_t)(CCommandResult*, CStringArray*);
+
 // Offsets updated for EU4 version 1.30.4 (5d62)
 namespace EU4Offsets {
 	// GfxEndSceneDX9 is hooked and used to draw the console.
