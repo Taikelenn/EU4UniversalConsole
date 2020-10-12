@@ -50,6 +50,9 @@
     <ClCompile Include="DrawOverlay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UIConsole.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EU4Offsets.h">
@@ -86,6 +89,9 @@
       <Filter>Header Files\EU4Classes</Filter>
     </ClInclude>
     <ClInclude Include="DrawingManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIConsole.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
