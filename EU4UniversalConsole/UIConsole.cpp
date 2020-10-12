@@ -6,6 +6,8 @@ UIConsole::UIConsole()
 {
     memset(commandBuffer, 0, sizeof(commandBuffer));
     historyPosition = -1;
+
+    consoleData.push_back(std::make_pair("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f)));
 }
 
 int UIConsole::InputCallbackInternal(ImGuiInputTextCallbackData* data)
@@ -64,11 +66,46 @@ int UIConsole::InputCallbackInternal(ImGuiInputTextCallbackData* data)
 
 void UIConsole::Render()
 {
+    // maximum console height is 400: if the window is smaller, reduce the console size but keep enough space for the input textbox
+    const float maxConsoleHeight = 400.0f;
+    const float consoleFooterHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+
+    float availableHeight = ImGui::GetContentRegionAvail().y;
+    if (availableHeight < maxConsoleHeight + consoleFooterHeight)
+    {
+        availableHeight = -consoleFooterHeight;
+    }
+    else
+    {
+        availableHeight = maxConsoleHeight;
+    }
+
+    ImGui::BeginChild("UICScrollingRegion", ImVec2(0, availableHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+
+    for (size_t i = 0; i < consoleData.size(); i++)
+    {
+        ImGui::PushStyleColor(ImGuiCol_Text, (ImVec4)consoleData[i].second);
+        ImGui::TextUnformatted(consoleData[i].first.c_str());
+        ImGui::PopStyleColor();
+    }
+
+    ImGui::PopStyleVar();
+    ImGui::EndChild();
+
+    ImGui::Separator();
+
     bool reclaimFocus = false;
-    
 	if (ImGui::InputText("Input", commandBuffer, IM_ARRAYSIZE(commandBuffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, UIConsole::InputCallback, this))
 	{
-        historicalEntries.push_back(commandBuffer);
+        // if the command was not empty, execute it
+        if (commandBuffer[0])
+        {
+            historicalEntries.push_back(commandBuffer);
+            consoleData.push_back(std::make_pair("# " + std::string(commandBuffer), ImColor(0.0f, 1.0f, 1.0f)));
+        }
+
+        // clear the command input box and reset history state
         commandBuffer[0] = 0;
         historyPosition = -1;
 

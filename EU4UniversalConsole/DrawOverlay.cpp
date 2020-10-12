@@ -7,6 +7,7 @@
 
 void DrawingManager::RenderOverlay()
 {
+	ImGui::SetNextWindowSize(ImVec2(750, 800), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("EU4UniversalConsole"))
 	{
 		ImGui::Text("Welcome to EU4UniversalConsole, built on %s", __DATE__ " " __TIME__);
@@ -15,8 +16,6 @@ void DrawingManager::RenderOverlay()
 		{
 			static UIConsole console;
 			console.Render();
-
-			
 		}
 
 		if (ImGui::Button("Unload"))
