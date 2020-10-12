@@ -1,7 +1,11 @@
 #include "HookManager.h"
 #include "EU4Offsets.h"
 
+#include "GfxMasterContextGFX.h"
+#include "DrawingManager.h"
+
 #include <cstdio>
+#include <d3d9.h>
 
 HANDLE HookManager::hUnloadEvent;
 
@@ -17,12 +21,28 @@ static unsigned char hookProcedureGameIdle[] = { 0x50, 0x53, 0x51, 0x52, 0x56, 0
 static WNDPROC previousWndProc;
 LRESULT CALLBACK hookedWindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	LRESULT retval;
+
+	if (DrawingManager::WindowProc(hwnd, uMsg, wParam, lParam, &retval))
+	{
+		return retval;
+	}
+
 	return CallWindowProc(previousWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-void hookedEndScene(void* ctx)
+void hookedEndScene(GfxMasterContextGFX* ctx)
 {
-	
+	IDirect3DDevice9* device = ctx->device;
+
+	static bool isDrawingInitialized = false;
+	if (!isDrawingInitialized)
+	{
+		isDrawingInitialized = true;
+		DrawingManager::Initialize(device);
+	}
+
+	DrawingManager::RenderFrame(device);
 }
 
 void hookedGameIdle()
