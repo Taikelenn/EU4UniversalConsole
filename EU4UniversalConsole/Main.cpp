@@ -2,6 +2,7 @@
 
 #include "EU4Offsets.h"
 #include "HookManager.h"
+#include "DrawingManager.h"
 
 HINSTANCE g_hInstDLL;
 
@@ -22,7 +23,13 @@ DWORD CALLBACK InitThread(LPVOID lpParameter)
 
 	if (WaitForSingleObject(HookManager::hUnloadEvent, INFINITE) == WAIT_OBJECT_0)
 	{
+		CloseHandle(HookManager::hUnloadEvent);
+		DrawingManager::Destroy();
 		HookManager::UninstallHooks(windowHandle);
+
+		Beep(432, 100);
+
+		FreeLibraryAndExitThread(g_hInstDLL, 0);
 	}
 
 	return ERROR_SUCCESS;

@@ -6,6 +6,7 @@
 #include "imgui/imgui_impl_dx9.h"
 
 static bool menuEnabled;
+static bool isDestroying;
 
 void DrawingManager::Initialize(IDirect3DDevice9* device)
 {
@@ -38,12 +39,25 @@ void DrawingManager::RenderFrame(IDirect3DDevice9* device)
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 }
 
+// this function must NOT be called from a drawing thread
+void DrawingManager::Destroy()
+{
+	menuEnabled = false;
+	isDestroying = true;
+
+	Sleep(50); // wait a tiny amount of time to make sure that no drawing occurs
+
+	ImGui_ImplDX9_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+}
+
 LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool DrawingManager::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* lResultPtr)
 {
 	// toggle menu on the INSERT key press
-	if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
+	if (uMsg == WM_KEYDOWN && wParam == VK_INSERT && !isDestroying)
 	{
 		menuEnabled = !menuEnabled;
 	}
