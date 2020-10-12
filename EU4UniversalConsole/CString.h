@@ -18,6 +18,8 @@ public:
 	CString() : CString("") { }
 	CString(const std::string& s);
 
+	void Free();
+
 	inline const char* GetData() { if (size >= 0x10) return ptr; return (const char*)buf; }
 	inline size_t GetSize() { return size; }
 

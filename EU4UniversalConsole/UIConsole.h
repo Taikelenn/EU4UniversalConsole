@@ -20,5 +20,7 @@ public:
 	UIConsole();
 
 	void Render();
+	void AppendEntry(const std::string& text, ImColor color);
+
 	static int InputCallback(ImGuiInputTextCallbackData* data);
 };

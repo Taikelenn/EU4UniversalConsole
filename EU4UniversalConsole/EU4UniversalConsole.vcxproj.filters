@@ -63,7 +63,7 @@
       <Filter>Source Files\EU4Classes</Filter>
     </ClCompile>
     <ClCompile Include="CStringArray.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\EU4Classes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

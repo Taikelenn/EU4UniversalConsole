@@ -31,3 +31,11 @@ CString::CString(const std::string& s)
 		this->allocSize = s.size() + 1;
 	}
 }
+
+void CString::Free()
+{
+	if (size >= 0x10)
+	{
+		HeapFree(GetProcessHeap(), 0, (void*)ptr);
+	}
+}

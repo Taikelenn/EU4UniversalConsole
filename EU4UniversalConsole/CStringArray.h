@@ -15,5 +15,7 @@ public:
 	inline CStringArray() { first = last = end = nullptr; }
 	CStringArray(const std::vector<CString>& vec);
 
+	void Free();
+
 	inline size_t GetElementCount() { return (size_t)(last - first) / sizeof(CString); }
 };

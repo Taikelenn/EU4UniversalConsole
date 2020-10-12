@@ -8,7 +8,7 @@ UIConsole::UIConsole()
     memset(commandBuffer, 0, sizeof(commandBuffer));
     historyPosition = -1;
 
-    consoleData.push_back(std::make_pair("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f)));
+    this->AppendEntry("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f));
 }
 
 void UIConsole::ExecuteCommand(const std::string& command)
@@ -110,8 +110,8 @@ void UIConsole::Render()
             std::string cmdString = commandBuffer;
 
             historicalEntries.push_back(cmdString);
-            consoleData.push_back(std::make_pair("# " + cmdString, ImColor(0.0f, 1.0f, 1.0f)));
 
+            this->AppendEntry("# " + cmdString, ImColor(0.0f, 1.0f, 1.0f));
             this->ExecuteCommand(cmdString);
         }
 
@@ -127,6 +127,11 @@ void UIConsole::Render()
     {
         ImGui::SetKeyboardFocusHere(-1);
     }
+}
+
+void UIConsole::AppendEntry(const std::string& text, ImColor color)
+{
+    consoleData.push_back(std::make_pair(text, color));
 }
 
 int UIConsole::InputCallback(ImGuiInputTextCallbackData* data)

@@ -15,3 +15,13 @@ CStringArray::CStringArray(const std::vector<CString>& vec)
 	this->last = this->first + vec.size();
 	this->end = this->last;
 }
+
+void CStringArray::Free()
+{
+	CString* p = this->first;
+	while (p != this->last)
+	{
+		p->Free();
+		p++;
+	}
+}
