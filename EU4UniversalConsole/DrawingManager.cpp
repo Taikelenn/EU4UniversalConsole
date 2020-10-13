@@ -9,6 +9,7 @@ static bool menuEnabled;
 static bool isDestroying;
 
 bool DrawingManager::inputBlocked = true;
+bool DrawingManager::listingCommands = false;
 
 void DrawingManager::Initialize(IDirect3DDevice9* device)
 {

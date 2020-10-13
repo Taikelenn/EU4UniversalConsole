@@ -115,5 +115,8 @@
     <ClInclude Include="CString.h">
       <Filter>Header Files\EU4Classes</Filter>
     </ClInclude>
+    <ClInclude Include="SOldCommandData.h">
+      <Filter>Header Files\EU4Classes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

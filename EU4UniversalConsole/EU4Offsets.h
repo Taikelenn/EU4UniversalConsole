@@ -7,6 +7,7 @@
 
 class CCommandResult;
 class CStringArray;
+class SOldCommandData;
 
 typedef CCommandResult* (*CommandFunction_t)(CCommandResult*, CStringArray*);
 
@@ -17,6 +18,10 @@ namespace EU4Offsets {
 
 	// CInGameIdler::Idle is hooked and used to execute console commands from the game's main thread. Executing commands from the EndScene function directly might cause threading issues
 	constexpr std::ptrdiff_t GameIdleOffset = 0x70E100; // string reference "End game screen from country annexed" or, if that fails, signature 48 8B C4 88 50 10 55 53 56 57 41 54 41 55 41 56
+
+	// Array of CConsoleCmd::SOldCommandData
+	constexpr std::ptrdiff_t CommandListOffset = 0x1F3D560;
+	constexpr int CommandCount = 363;
 
 	// Converts a relative offset into a memory address within eu4.exe's address space
 	inline void* TranslateOffset(std::ptrdiff_t offset)
@@ -30,5 +35,10 @@ namespace EU4Offsets {
 	{
 		// This assumes that there's only one EU4 instance running.
 		return FindWindowA("SDL_app", "Europa Universalis IV");
+	}
+
+	inline SOldCommandData* GetCommandList()
+	{
+		return (SOldCommandData*)TranslateOffset(CommandListOffset);
 	}
 }

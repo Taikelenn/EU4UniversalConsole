@@ -72,21 +72,9 @@ int UIConsole::InputCallbackInternal(ImGuiInputTextCallbackData* data)
 
 void UIConsole::Render()
 {
-    // maximum console height is 400: if the window is smaller, reduce the console size but keep enough space for the input textbox
-    const float maxConsoleHeight = 400.0f;
     const float consoleFooterHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
 
-    float availableHeight = ImGui::GetContentRegionAvail().y;
-    if (availableHeight < maxConsoleHeight + consoleFooterHeight)
-    {
-        availableHeight = -consoleFooterHeight;
-    }
-    else
-    {
-        availableHeight = maxConsoleHeight;
-    }
-
-    ImGui::BeginChild("UICScrollingRegion", ImVec2(0, availableHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
+    ImGui::BeginChild("UICScrollingRegion", ImVec2(0, -consoleFooterHeight), false, ImGuiWindowFlags_HorizontalScrollbar);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
 
     for (size_t i = 0; i < consoleData.size(); i++)
