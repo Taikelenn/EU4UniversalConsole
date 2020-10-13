@@ -16,6 +16,7 @@ void DrawingManager::Initialize(IDirect3DDevice9* device)
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NoMouseCursorChange;
+	io.IniFilename = nullptr; // don't use the imgui.ini file
 
 	ImGui_ImplWin32_Init(EU4Offsets::GetWindowHandle());
 	ImGui_ImplDX9_Init(device);

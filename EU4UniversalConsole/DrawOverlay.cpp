@@ -36,17 +36,12 @@ void DrawingManager::RenderOverlay()
 			static UIConsole console;
 			console.Render();
 		}
-
-		SOldCommandData* cmd = EU4Offsets::GetCommandList();
-		for (int i = 0; i < 10; ++i)
-		{
-			ImGui::Text("%s", cmd[i].commandName);
-		}
 	}
 	ImGui::End();
 
 	if (listingCommands)
 	{
+		ImGui::SetNextWindowSize(ImVec2(500, 350), ImGuiCond_FirstUseEver);
 		if (ImGui::Begin("Command list", &listingCommands))
 		{
 			static std::vector<SOldCommandData> commandsInfo;
@@ -57,10 +52,31 @@ void DrawingManager::RenderOverlay()
 				std::sort(commandsInfo.begin(), commandsInfo.end(), [](const SOldCommandData& a, const SOldCommandData& b) { return strcmp(a.commandName, b.commandName) < 0; });
 			}
 
-			for (const auto& cmd : commandsInfo)
+			const float listFooterHeight = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
+			ImGui::BeginChild("UICommandList", ImVec2(0, -listFooterHeight));
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
+
+			static int selectedCommand = -1;
+			static char filterBuf[256];
+
+			for (size_t i = 0; i < commandsInfo.size(); ++i)
 			{
-				ImGui::Text(cmd.commandName);
+				if (*filterBuf && strstr(commandsInfo[i].commandName, filterBuf) == nullptr)
+				{
+					continue;
+				}
+
+				if (ImGui::Selectable(commandsInfo[i].commandName, selectedCommand == i))
+				{
+					selectedCommand = (int)i;
+				}
 			}
+
+			ImGui::PopStyleVar();
+			ImGui::EndChild();
+
+			ImGui::Separator();
+			ImGui::InputTextWithHint("Command filter", "enter a substring here", filterBuf, sizeof(filterBuf));
 		}
 		ImGui::End();
 	}
