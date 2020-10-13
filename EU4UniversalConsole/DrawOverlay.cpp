@@ -4,6 +4,7 @@
 #include "UIConsole.h"
 #include "EU4Offsets.h"
 #include "SOldCommandData.h"
+#include "CommandExecutor.h"
 
 #include "imgui/imgui.h"
 

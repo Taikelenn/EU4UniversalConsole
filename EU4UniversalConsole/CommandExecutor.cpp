@@ -6,7 +6,7 @@
 #include "EU4Offsets.h"
 #include "SOldCommandData.h"
 
-bool CommandExecutor::commandScheduled = false;
+ULONGLONG CommandExecutor::commandScheduled = false;
 
 CStringArray* SplitString(const std::string& arguments)
 {
@@ -126,8 +126,10 @@ SOldCommandData* GetCommandDataByName(const std::string& s)
 
 void CommandExecutor::ExecuteScheduledCommand()
 {
-    if (CommandExecutor::commandScheduled)
+    if (commandScheduled)
     {
+        commandScheduled |= 1;
+
         CCommandResult cmdResult;
         scheduledCommand_func(&cmdResult, scheduledCommand_args);
         if (cmdResult.isSuccessful)
@@ -141,15 +143,38 @@ void CommandExecutor::ExecuteScheduledCommand()
 
         // free allocated memory
         cmdResult.result.Free();
+        RemoveScheduledCommand();
+    }
+}
+
+void CommandExecutor::CheckForCommandTimeout()
+{
+    // if command is NOT being executed right now (a slight race condition, but we should be fine) and it was more than 2500 ms before the command was scheduled
+    if (CommandExecutor::commandScheduled && !(CommandExecutor::commandScheduled & 1) && (GetTickCount64() - CommandExecutor::commandScheduled) > 2500)
+    {
+        // command execution timeout: unschedule the command and free memory
+        if (scheduledCommand_console)
+        {
+            scheduledCommand_console->AppendEntry("Command execution timed out. Is the game currently running?", ImColor(1.0f, 1.0f, 0.0f));
+        }
+
+        CommandExecutor::RemoveScheduledCommand();
+    }
+}
+
+void CommandExecutor::RemoveScheduledCommand()
+{
+    if (scheduledCommand_args)
+    {
         scheduledCommand_args->Free();
         delete scheduledCommand_args;
-
-        scheduledCommand_func = nullptr;
-        scheduledCommand_args = nullptr;
-        scheduledCommand_console = nullptr;
-
-        CommandExecutor::commandScheduled = false;
     }
+
+    scheduledCommand_func = nullptr;
+    scheduledCommand_args = nullptr;
+    scheduledCommand_console = nullptr;
+
+    commandScheduled = 0;
 }
 
 void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* console)
@@ -188,6 +213,7 @@ void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* cons
         scheduledCommand_args = arguments;
         scheduledCommand_console = console;
 
-        commandScheduled = true;
+        commandScheduled = GetTickCount64();
+        commandScheduled &= ~(ULONGLONG)1; // clear the LSB
     }
 }

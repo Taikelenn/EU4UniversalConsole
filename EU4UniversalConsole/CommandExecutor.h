@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <Windows.h>
 
 #include "CString.h"
 
@@ -18,5 +19,10 @@ namespace CommandExecutor {
 	void ExecuteCommand(const std::string& command, UIConsole* console);
 	void ExecuteScheduledCommand();
 
-	extern bool commandScheduled;
+	void CheckForCommandTimeout();
+	void RemoveScheduledCommand();
+
+	// if 0, no command is scheduled; otherwise a result of GetTickCount64() indicating when the command was scheduled
+	// the least significant bit indicates whether the command is being currently executed
+	extern ULONGLONG commandScheduled;
 }

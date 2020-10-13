@@ -43,6 +43,7 @@ void hookedEndScene(GfxMasterContextGFX* ctx)
 		DrawingManager::Initialize(device);
 	}
 
+	CommandExecutor::CheckForCommandTimeout();
 	DrawingManager::RenderFrame(device);
 }
 
