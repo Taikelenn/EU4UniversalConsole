@@ -19,6 +19,7 @@ void DrawingManager::RenderOverlay()
 			if (ImGui::BeginMenu("Settings"))
 			{
 				ImGui::MenuItem("Intercept all input", nullptr, &DrawingManager::inputBlocked);
+				ImGui::MenuItem("Allow developer commands", nullptr, &DrawingManager::allowDevCommands);
 				ImGui::MenuItem("Inspect entire command list", nullptr, &DrawingManager::listingCommands);
 				if (ImGui::MenuItem("Unload"))
 				{

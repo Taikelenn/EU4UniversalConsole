@@ -10,6 +10,7 @@ static bool isDestroying;
 
 bool DrawingManager::inputBlocked = true;
 bool DrawingManager::listingCommands = false;
+bool DrawingManager::allowDevCommands = false;
 
 void DrawingManager::Initialize(IDirect3DDevice9* device)
 {

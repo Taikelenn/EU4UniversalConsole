@@ -1,8 +1,10 @@
 #include "CommandExecutor.h"
 #include "CStringArray.h"
+#include "DrawingManager.h"
 #include "UIConsole.h"
 
 #include "EU4Offsets.h"
+#include "SOldCommandData.h"
 
 bool CommandExecutor::commandScheduled = false;
 
@@ -81,6 +83,10 @@ std::string SanitizeString(const std::string& s)
                 res += "[-]";
                 i += 2;
             }
+            else
+            {
+                res.push_back('?');
+            }
         }
         else if (c == 0xa7) // a color modifier? should be followed by a color code; skip it entirely
         {
@@ -102,6 +108,21 @@ std::string SanitizeString(const std::string& s)
 CommandFunction_t scheduledCommand_func;
 CStringArray* scheduledCommand_args;
 UIConsole* scheduledCommand_console;
+
+SOldCommandData* GetCommandDataByName(const std::string& s)
+{
+    SOldCommandData* commands = EU4Offsets::GetCommandList();
+
+    for (int i = 0; i < EU4Offsets::CommandCount; ++i)
+    {
+        if (commands[i].commandName == s)
+        {
+            return &commands[i];
+        }
+    }
+
+    return nullptr;
+}
 
 void CommandExecutor::ExecuteScheduledCommand()
 {
@@ -133,6 +154,12 @@ void CommandExecutor::ExecuteScheduledCommand()
 
 void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* console)
 {
+    if (commandScheduled)
+    {
+        console->AppendEntry("Another command is currently queued, please wait a few seconds.", ImColor(1.0f, 1.0f, 1.0f));
+        return;
+    }
+
     std::string commandVerb = command;
     std::string argumentString = "";
 
@@ -143,21 +170,24 @@ void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* cons
         argumentString = command.substr(firstSpace);
     }
 
-    CStringArray* arguments = SplitString(argumentString);
-
-    // temporarily, support only the "event" command for testing
-    if (commandVerb == "event")
+    SOldCommandData* cmdData = GetCommandDataByName(commandVerb);
+    if (cmdData == nullptr)
     {
-        std::ptrdiff_t eventFunc = 0xbca9f0; // this offset is not in the EU4Offsets namespace because it is temporary and will be removed
+        console->AppendEntry("This command does not exist", ImColor(1.0f, 1.0f, 0.0f));
+    }
+    else if (!cmdData->isAvailableInRelease && !DrawingManager::allowDevCommands)
+    {
+        console->AppendEntry("This command is disallowed in release builds.", ImColor(1.0f, 1.0f, 0.0f));
+        console->AppendEntry("You can enable these commands in the console settings menu.", ImColor(1.0f, 1.0f, 0.0f));
+    }
+    else
+    {
+        CStringArray* arguments = SplitString(argumentString);
 
-        scheduledCommand_func = (CommandFunction_t)EU4Offsets::TranslateOffset(eventFunc);
+        scheduledCommand_func = cmdData->function;
         scheduledCommand_args = arguments;
         scheduledCommand_console = console;
 
         commandScheduled = true;
-    }
-    else
-    {
-        console->AppendEntry("This command does not exist", ImColor(1.0f, 1.0f, 0.0f));
     }
 }
