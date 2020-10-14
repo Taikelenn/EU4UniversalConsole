@@ -16,4 +16,5 @@ namespace DrawingManager {
 	extern bool inputBlocked;
 	extern bool listingCommands;
 	extern bool allowDevCommands;
+	extern bool preserveRandomness;
 }

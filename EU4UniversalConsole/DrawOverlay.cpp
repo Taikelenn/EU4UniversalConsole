@@ -21,11 +21,10 @@ void DrawingManager::RenderOverlay()
 			{
 				ImGui::MenuItem("Intercept all input", nullptr, &DrawingManager::inputBlocked);
 				ImGui::MenuItem("Allow developer commands", nullptr, &DrawingManager::allowDevCommands);
-				ImGui::MenuItem("Inspect entire command list", nullptr, &DrawingManager::listingCommands);
-				if (ImGui::MenuItem("Unload"))
-				{
-					SetEvent(HookManager::hUnloadEvent);
-				}
+				ImGui::MenuItem("Preserve random state", nullptr, &DrawingManager::allowDevCommands);
+				ImGui::Separator();
+				if (ImGui::MenuItem("Inspect entire command list")) { DrawingManager::listingCommands = true; }
+				if (ImGui::MenuItem("Unload")) { SetEvent(HookManager::hUnloadEvent); }
 
 				ImGui::EndMenu();
 			}

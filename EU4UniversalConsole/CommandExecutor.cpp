@@ -130,6 +130,11 @@ void CommandExecutor::ExecuteScheduledCommand()
     {
         commandScheduled |= 1;
 
+        if (DrawingManager::preserveRandomness)
+        {
+            // TODO: preserve random state
+        }
+
         CCommandResult cmdResult;
         scheduledCommand_func(&cmdResult, scheduledCommand_args);
         if (cmdResult.isSuccessful)
