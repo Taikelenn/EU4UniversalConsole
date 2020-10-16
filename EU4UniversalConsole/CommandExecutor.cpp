@@ -158,9 +158,10 @@ void CommandExecutor::CheckForCommandTimeout()
     if (CommandExecutor::commandScheduled && !(CommandExecutor::commandScheduled & 1) && (GetTickCount64() - CommandExecutor::commandScheduled) > 2500)
     {
         // command execution timeout: unschedule the command and free memory
-        if (scheduledCommand_console)
+        UIConsole* uic = scheduledCommand_console;
+        if (uic)
         {
-            scheduledCommand_console->AppendEntry("Command execution timed out. Is the game currently running?", ImColor(1.0f, 1.0f, 0.0f));
+            uic->AppendEntry("Command execution timed out. Is the game currently running?", ImColor(1.0f, 1.0f, 0.0f));
         }
 
         CommandExecutor::RemoveScheduledCommand();

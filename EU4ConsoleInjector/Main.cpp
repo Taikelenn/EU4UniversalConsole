@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 				EU4Injector::Inject((DWORD)pid);
 			}
 		}
-		catch (const std::exception& e)
+		catch (const std::exception&)
 		{
 			invalidUsage = true;
 		}
