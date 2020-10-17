@@ -1,6 +1,7 @@
 #include "Injector.h"
 #include "HandleWrapper.h"
 
+#include <string>
 #include <Psapi.h>
 
 inline LPTHREAD_START_ROUTINE GetLoadLibraryAddress()
@@ -28,7 +29,7 @@ bool EU4Injector::IsEU4Process(DWORD processId)
         {
             if (GetModuleBaseNameW(hProcess.get(), hMod, procName, sizeof(procName) / sizeof(wchar_t)))
             {
-                return _wcsicmp(procName, L"eu4.exe");
+                return _wcsicmp(procName, L"eu4.exe") == 0;
             }
         }
     }
@@ -36,12 +37,13 @@ bool EU4Injector::IsEU4Process(DWORD processId)
     return false;
 }
 
-bool EU4Injector::Inject(DWORD processId)
+bool EU4Injector::Inject(DWORD processId, std::string& msg)
 {
     wchar_t fullDLLPath[MAX_PATH + 1];
     SIZE_T fullDLLPathLen = GetFullPathNameW(InjectedDLLName, (sizeof(fullDLLPath) - 1) / sizeof(wchar_t), fullDLLPath, nullptr);
     if (fullDLLPathLen == 0)
     {
+        msg = "Unexpected error: cannot resolve relative DLL path, error " + std::to_string(GetLastError());
         return false;
     }
 
@@ -71,16 +73,18 @@ bool EU4Injector::Inject(DWORD processId)
         {
             if (WaitForSingleObject(hThread.get(), 3500) == WAIT_OBJECT_0)
             {
+                VirtualFreeEx(hProcess.get(), pathMemory, 0, MEM_RELEASE);
+
                 DWORD exitCode;
                 if (GetExitCodeThread(hThread.get(), &exitCode))
                 {
-                    if (exitCode == 0)
+                    if (exitCode != 0)
                     {
-                        VirtualFreeEx(hProcess.get(), pathMemory, 0, MEM_RELEASE);
                         return true;
                     }
                     else
                     {
+                        msg = "The console initialization thread failed.";
                         return false;
                     }
                 }
@@ -94,5 +98,13 @@ bool EU4Injector::Inject(DWORD processId)
         return false;
     }
 
+    if (GetLastError() == 5)
+    {
+        msg = "Cannot access the EU4 process: access is denied.";
+    }
+    else
+    {
+        msg = "Cannot access the EU4 process: error " + std::to_string(GetLastError());
+    }
     return false;
 }
