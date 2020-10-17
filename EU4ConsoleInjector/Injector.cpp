@@ -37,13 +37,28 @@ bool EU4Injector::IsEU4Process(DWORD processId)
     return false;
 }
 
+// https://stackoverflow.com/questions/3828835/how-can-we-check-if-a-file-exists-or-not-using-win32-program
+bool FileExists(LPCWSTR szPath)
+{
+    DWORD dwAttrib = GetFileAttributesW(szPath);
+    return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 bool EU4Injector::Inject(DWORD processId, std::string& msg)
 {
     wchar_t fullDLLPath[MAX_PATH + 1];
+    memset(fullDLLPath, 0, sizeof(fullDLLPath));
+
     SIZE_T fullDLLPathLen = GetFullPathNameW(InjectedDLLName, (sizeof(fullDLLPath) - 1) / sizeof(wchar_t), fullDLLPath, nullptr);
     if (fullDLLPathLen == 0)
     {
         msg = "Unexpected error: cannot resolve relative DLL path, error " + std::to_string(GetLastError());
+        return false;
+    }
+
+    if (!FileExists(fullDLLPath))
+    {
+        msg = "The file EU4UniversalConsole.dll does not exist. Please ensure that it exists in the same directory as the injector.";
         return false;
     }
 

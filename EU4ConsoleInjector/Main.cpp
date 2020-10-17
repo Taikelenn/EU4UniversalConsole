@@ -95,13 +95,12 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
+				SetConsoleTextAttribute(hStdOut, 14);
 				if (!injectionMsg.empty())
 				{
-					SetConsoleTextAttribute(hStdOut, 14);
 					std::cout << " [-] " << injectionMsg << std::endl;
 				}
-
-				SetConsoleTextAttribute(hStdOut, 12);
+				
 				std::cout << " [-] Injection failed." << std::endl;
 			}
 
