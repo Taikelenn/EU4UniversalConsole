@@ -44,6 +44,30 @@ bool FileExists(LPCWSTR szPath)
     return (dwAttrib != INVALID_FILE_ATTRIBUTES && !(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
+// adapted from https://docs.microsoft.com/en-us/windows/win32/psapi/enumerating-all-modules-for-a-process
+bool IsAlreadyInjected(HANDLE hProcess)
+{
+    HMODULE hMods[1024];
+    DWORD cbNeeded;
+
+    if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
+    {
+        for (int i = 0; i < cbNeeded / sizeof(HMODULE); i++)
+        {
+            wchar_t szModName[MAX_PATH];
+            if (GetModuleBaseNameW(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR)))
+            {
+                if (_wcsicmp(szModName, InjectedDLLName) == 0)
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 bool EU4Injector::Inject(DWORD processId, std::string& msg)
 {
     wchar_t fullDLLPath[MAX_PATH + 1];
@@ -65,6 +89,12 @@ bool EU4Injector::Inject(DWORD processId, std::string& msg)
     HandleWrapper hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, processId);
     if (hProcess)
     {
+        if (IsAlreadyInjected(hProcess.get()))
+        {
+            msg = "The console has already been enabled for this game instance.";
+            return false;
+        }
+
         LPVOID pathMemory = VirtualAllocEx(hProcess.get(), nullptr, (fullDLLPathLen + 1) * sizeof(wchar_t), MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
         if (!pathMemory)
         {
