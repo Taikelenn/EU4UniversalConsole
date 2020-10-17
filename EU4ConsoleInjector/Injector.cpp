@@ -22,15 +22,9 @@ bool EU4Injector::IsEU4Process(DWORD processId)
 
     if (hProcess)
     {
-        HMODULE hMod;
-        DWORD cbNeeded;
-
-        if (EnumProcessModules(hProcess.get(), &hMod, sizeof(hMod), &cbNeeded))
+        if (GetModuleBaseNameW(hProcess.get(), nullptr, procName, sizeof(procName) / sizeof(wchar_t)))
         {
-            if (GetModuleBaseNameW(hProcess.get(), hMod, procName, sizeof(procName) / sizeof(wchar_t)))
-            {
-                return _wcsicmp(procName, L"eu4.exe") == 0;
-            }
+            return _wcsicmp(procName, L"eu4.exe") == 0;
         }
     }
 
@@ -143,7 +137,7 @@ bool EU4Injector::Inject(DWORD processId, std::string& msg)
         return false;
     }
 
-    if (GetLastError() == 5)
+    if (GetLastError() == ERROR_ACCESS_DENIED)
     {
         msg = "Cannot access the EU4 process: access is denied.";
     }

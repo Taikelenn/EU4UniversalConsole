@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 			if (EU4Injector::Inject(pid, injectionMsg))
 			{
 				SetConsoleTextAttribute(hStdOut, 10);
-				std::cout << " [+] Injection successful! In-game, press INSERT to toggle the console." << std::endl;
+				std::cout << " [+] Injection successful! While in game, press INSERT to toggle the console." << std::endl;
 			}
 			else
 			{

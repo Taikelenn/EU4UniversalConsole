@@ -161,7 +161,7 @@ void CommandExecutor::CheckForCommandTimeout()
         UIConsole* uic = scheduledCommand_console;
         if (uic)
         {
-            uic->AppendEntry("Command execution timed out. Is the game currently running?", ImColor(1.0f, 1.0f, 0.0f));
+            uic->AppendEntry("Command execution timed out. Is a game currently running?", ImColor(1.0f, 1.0f, 0.0f));
         }
 
         CommandExecutor::RemoveScheduledCommand();
