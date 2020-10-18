@@ -126,9 +126,9 @@ SOldCommandData* GetCommandDataByName(const std::string& s)
 
 void CommandExecutor::ExecuteScheduledCommand()
 {
-    if (commandScheduled)
+    if (CommandExecutor::commandScheduled)
     {
-        commandScheduled |= 1;
+        CommandExecutor::commandScheduled |= 1;
 
         if (DrawingManager::preserveRandomness)
         {
@@ -148,7 +148,7 @@ void CommandExecutor::ExecuteScheduledCommand()
 
         // free allocated memory
         cmdResult.result.Free();
-        RemoveScheduledCommand();
+        CommandExecutor::RemoveScheduledCommand();
     }
 }
 
@@ -180,7 +180,7 @@ void CommandExecutor::RemoveScheduledCommand()
     scheduledCommand_args = nullptr;
     scheduledCommand_console = nullptr;
 
-    commandScheduled = 0;
+    CommandExecutor::commandScheduled = 0;
 }
 
 void CommandExecutor::ExecuteCommand(const std::string& command, UIConsole* console)
