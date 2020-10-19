@@ -21,7 +21,7 @@ void DrawingManager::RenderOverlay()
 			{
 				ImGui::MenuItem("Intercept all input", nullptr, &DrawingManager::inputBlocked);
 				ImGui::MenuItem("Allow developer commands", nullptr, &DrawingManager::allowDevCommands);
-				ImGui::MenuItem("Preserve random state", nullptr, &DrawingManager::allowDevCommands);
+				ImGui::MenuItem("Preserve random state", nullptr, &DrawingManager::preserveRandomness);
 				ImGui::Separator();
 				if (ImGui::MenuItem("Inspect entire command list")) { DrawingManager::listingCommands = true; }
 				if (ImGui::MenuItem("Unload")) { SetEvent(HookManager::hUnloadEvent); }
@@ -32,7 +32,7 @@ void DrawingManager::RenderOverlay()
 		}
 		ImGui::Text("Welcome to EU4UniversalConsole, built on %s", __DATE__ " " __TIME__);
 
-		if (ImGui::CollapsingHeader("Console"))
+		if (ImGui::CollapsingHeader("Console", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			static UIConsole console;
 			console.Render();

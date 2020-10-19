@@ -28,7 +28,7 @@ void DrawingManager::Initialize(IDirect3DDevice9* device)
 
 void DrawingManager::RenderFrame(IDirect3DDevice9* device)
 {
-	if (!device || !menuEnabled)
+	if (!device || !menuEnabled || isDestroying)
 	{
 		return;
 	}

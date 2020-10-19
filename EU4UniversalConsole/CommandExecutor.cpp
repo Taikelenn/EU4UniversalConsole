@@ -130,10 +130,7 @@ void CommandExecutor::ExecuteScheduledCommand()
     {
         CommandExecutor::commandScheduled |= 1;
 
-        if (DrawingManager::preserveRandomness)
-        {
-            // TODO: preserve random state
-        }
+        uint64_t storedRandomState = EU4Offsets::StoreRandomState();
 
         CCommandResult cmdResult;
         scheduledCommand_func(&cmdResult, scheduledCommand_args);
@@ -144,6 +141,13 @@ void CommandExecutor::ExecuteScheduledCommand()
         else
         {
             scheduledCommand_console->AppendEntry(SanitizeString(cmdResult.result.ToString()), ImColor(1.0f, 0.0f, 0.0f));
+        }
+
+        if (DrawingManager::preserveRandomness)
+        {
+            // preserving random state allows to avoid multiplayer desynchronization due to mismatched RNG state
+            // this is mostly targeted towards enabling the usage of the "event" command in multiplayer games
+            EU4Offsets::RestoreRandomState(storedRandomState);
         }
 
         // free allocated memory

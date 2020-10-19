@@ -19,6 +19,12 @@ namespace EU4Offsets {
 	// CInGameIdler::Idle is hooked and used to execute console commands from the game's main thread. Executing commands from the EndScene function directly might cause threading issues
 	constexpr std::ptrdiff_t GameIdleOffset = 0x70E100; // string reference "End game screen from country annexed" or, if that fails, signature 48 8B C4 88 50 10 55 53 56 57 41 54 41 55 41 56
 
+	// Speculation: the number of random number generations
+	constexpr std::ptrdiff_t RandomCountOffset = 0x22469C4; // signature 8B 41 ?? 89 ?? ?? ?? ?? ?? 8B 41 ?? 89 ?? ?? ?? ?? ?? E9 ?? ?? ?? ??
+
+	// Speculation: an index representing the value to get from the random number generator's internal state
+	constexpr std::ptrdiff_t RandomIndexOffset = 0x2221350; // signature 45 33 DB 44 89 ?? ?? ?? ?? ?? 85 C0 74 ??
+
 	// Array of CConsoleCmd::SOldCommandData
 	constexpr std::ptrdiff_t CommandListOffset = 0x1F3D560;
 	constexpr int CommandCount = 363;
@@ -40,5 +46,18 @@ namespace EU4Offsets {
 	inline SOldCommandData* GetCommandList()
 	{
 		return (SOldCommandData*)TranslateOffset(CommandListOffset);
+	}
+
+	// we exploit the fact that both RandomIndex and RandomCount are 4-byte, so we can pack that into one 8-byte variable
+	inline uint64_t StoreRandomState()
+	{
+		uint64_t retval = *(uint32_t*)TranslateOffset(RandomIndexOffset);
+		return (retval << 32) | *(uint32_t*)TranslateOffset(RandomCountOffset);
+	}
+
+	inline void RestoreRandomState(uint64_t randomState)
+	{
+		*(uint32_t*)TranslateOffset(RandomIndexOffset) = (randomState >> 32) & 0xFFFFFFFF;
+		*(uint32_t*)TranslateOffset(RandomCountOffset) = randomState & 0xFFFFFFFF;
 	}
 }
