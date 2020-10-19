@@ -37,7 +37,7 @@ void DrawingManager::RenderFrame(IDirect3DDevice9* device)
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 	RenderOverlay();
 
 	ImGui::EndFrame();
