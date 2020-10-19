@@ -7,14 +7,20 @@
 
 static bool menuEnabled;
 static bool isDestroying;
+static LARGE_INTEGER perfFreq;
 
 bool DrawingManager::inputBlocked = true;
 bool DrawingManager::listingCommands = false;
 bool DrawingManager::allowDevCommands = false;
 bool DrawingManager::preserveRandomness = true;
 
+unsigned long long DrawingManager::lastFrameHookTime;
+
 void DrawingManager::Initialize(IDirect3DDevice9* device)
 {
+	QueryPerformanceFrequency(&perfFreq);
+	perfFreq.QuadPart /= 1000;
+
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard | ImGuiConfigFlags_NoMouseCursorChange;
@@ -33,16 +39,21 @@ void DrawingManager::RenderFrame(IDirect3DDevice9* device)
 		return;
 	}
 
+	LARGE_INTEGER beginTick, endTick;
+	QueryPerformanceCounter(&beginTick);
+
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	//ImGui::ShowDemoWindow();
 	RenderOverlay();
 
 	ImGui::EndFrame();
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
+	QueryPerformanceCounter(&endTick);
+	DrawingManager::lastFrameHookTime = (endTick.QuadPart - beginTick.QuadPart) / perfFreq.QuadPart;
 }
 
 // this function must NOT be called from a drawing thread

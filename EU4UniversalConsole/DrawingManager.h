@@ -17,4 +17,6 @@ namespace DrawingManager {
 	extern bool listingCommands;
 	extern bool allowDevCommands;
 	extern bool preserveRandomness;
+
+	extern unsigned long long lastFrameHookTime;
 }

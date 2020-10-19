@@ -15,6 +15,7 @@ void DrawingManager::RenderOverlay()
 	ImGui::SetNextWindowSize(ImVec2(750, 600), ImGuiCond_FirstUseEver);
 	if (ImGui::Begin("Universal console", nullptr, ImGuiWindowFlags_MenuBar))
 	{
+		static UIConsole console;
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Settings"))
@@ -23,6 +24,7 @@ void DrawingManager::RenderOverlay()
 				ImGui::MenuItem("Allow developer commands", nullptr, &DrawingManager::allowDevCommands);
 				ImGui::MenuItem("Preserve random state", nullptr, &DrawingManager::preserveRandomness);
 				ImGui::Separator();
+				if (ImGui::MenuItem("Clear console")) { console.Clear(); }
 				if (ImGui::MenuItem("Inspect entire command list")) { DrawingManager::listingCommands = true; }
 				if (ImGui::MenuItem("Unload")) { SetEvent(HookManager::hUnloadEvent); }
 
@@ -31,10 +33,10 @@ void DrawingManager::RenderOverlay()
 			ImGui::EndMenuBar();
 		}
 		ImGui::Text("Welcome to EU4UniversalConsole, built on %s", __DATE__ " " __TIME__);
+		ImGui::Text("Last console frame time: %d ms", DrawingManager::lastFrameHookTime);
 
 		if (ImGui::CollapsingHeader("Console", ImGuiTreeNodeFlags_DefaultOpen))
 		{
-			static UIConsole console;
 			console.Render();
 		}
 	}

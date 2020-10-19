@@ -11,6 +11,7 @@ private:
 	char commandBuffer[2048];
 	std::vector<std::string> historicalEntries;
 	int historyPosition;
+	bool shouldScrollDown;
 
 	std::vector<std::pair<std::string, ImColor>> consoleData;
 
@@ -21,6 +22,8 @@ public:
 
 	void Render();
 	void AppendEntry(const std::string& text, ImColor color);
+
+	void Clear();
 
 	static int InputCallback(ImGuiInputTextCallbackData* data);
 };

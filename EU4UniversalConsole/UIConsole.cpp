@@ -5,10 +5,7 @@
 
 UIConsole::UIConsole()
 {
-    memset(commandBuffer, 0, sizeof(commandBuffer));
-    historyPosition = -1;
-
-    this->AppendEntry("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f));
+    this->Clear();
 }
 
 void UIConsole::ExecuteCommand(const std::string& command)
@@ -84,6 +81,12 @@ void UIConsole::Render()
         ImGui::PopStyleColor();
     }
 
+    if (shouldScrollDown)
+    {
+        ImGui::SetScrollHereY(1.0f);
+        shouldScrollDown = false;
+    }
+
     ImGui::PopStyleVar();
     ImGui::EndChild();
 
@@ -120,6 +123,19 @@ void UIConsole::Render()
 void UIConsole::AppendEntry(const std::string& text, ImColor color)
 {
     consoleData.push_back(std::make_pair(text, color));
+    shouldScrollDown = true;
+}
+
+void UIConsole::Clear()
+{
+    consoleData.clear();
+    historicalEntries.clear();
+    historyPosition = -1;
+    shouldScrollDown = false;
+
+    memset(commandBuffer, 0, sizeof(commandBuffer));
+
+    this->AppendEntry("Welcome to EU4UniversalConsole!", ImColor(0.9f, 0.7f, 0.9f));
 }
 
 int UIConsole::InputCallback(ImGuiInputTextCallbackData* data)
