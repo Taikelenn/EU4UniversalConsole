@@ -79,7 +79,8 @@ void DrawingManager::RenderOverlay()
 					continue;
 				}
 
-				if (ImGui::Selectable(commandsInfo[i].commandName, selectedCommand == i))
+				std::string labelId = commandsInfo[i].commandName + std::string("##") + std::to_string(i);
+				if (ImGui::Selectable(labelId.c_str(), selectedCommand == i))
 				{
 					selectedCommand = (int)i;
 				}
