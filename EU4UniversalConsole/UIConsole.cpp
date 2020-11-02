@@ -92,7 +92,6 @@ void UIConsole::Render()
 
 	ImGui::Separator();
 
-	bool reclaimFocus = false;
 	if (ImGui::InputText("Input", commandBuffer, IM_ARRAYSIZE(commandBuffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CallbackHistory, UIConsole::InputCallback, this))
 	{
 		// if the command was not empty, execute it
@@ -118,6 +117,8 @@ void UIConsole::Render()
 	{
 		ImGui::SetKeyboardFocusHere(-1);
 	}
+
+	reclaimFocus = false;
 }
 
 void UIConsole::AppendEntry(const std::string& text, ImColor color)
@@ -132,6 +133,7 @@ void UIConsole::Clear()
 	historicalEntries.clear();
 	historyPosition = -1;
 	shouldScrollDown = false;
+	reclaimFocus = true;
 
 	memset(commandBuffer, 0, sizeof(commandBuffer));
 

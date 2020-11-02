@@ -12,6 +12,7 @@ private:
 	std::vector<std::string> historicalEntries;
 	int historyPosition;
 	bool shouldScrollDown;
+	bool reclaimFocus;
 
 	std::vector<std::pair<std::string, ImColor>> consoleData;
 
