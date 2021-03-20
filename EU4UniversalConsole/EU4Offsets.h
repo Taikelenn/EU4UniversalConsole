@@ -11,22 +11,22 @@ class SOldCommandData;
 
 typedef CCommandResult* (*CommandFunction_t)(CCommandResult*, CStringArray*);
 
-// Offsets updated for EU4 version 1.30.4 (5d62)
+// Offsets updated for EU4 version 1.30.6 (0b2c)
 namespace EU4Offsets {
 	// GfxEndSceneDX9 is hooked and used to draw the console.
-	constexpr std::ptrdiff_t EndSceneOffset = 0x1345F20; // signature 48 83 EC 28 48 8B 49 08 48 8B 01 FF 90 50 01 00 00
+	constexpr std::ptrdiff_t EndSceneOffset = 0x1368CA0; // signature 48 83 EC 28 48 8B 49 08 48 8B 01 FF 90 50 01 00 00
 
 	// CInGameIdler::Idle is hooked and used to execute console commands from the game's main thread. Executing commands from the EndScene function directly might cause threading issues
-	constexpr std::ptrdiff_t GameIdleOffset = 0x70E100; // string reference "End game screen from country annexed" or, if that fails, signature 48 8B C4 88 50 10 55 53 56 57 41 54 41 55 41 56
+	constexpr std::ptrdiff_t GameIdleOffset = 0x710750; // string reference "End game screen from country annexed" or, if that fails, signature 48 8B C4 88 50 10 55 53 56 57 41 54 41 55 41 56
 
-	// Speculation: the number of random number generations
-	constexpr std::ptrdiff_t RandomCountOffset = 0x22469C4; // signature 8B 41 ?? 89 ?? ?? ?? ?? ?? 8B 41 ?? 89 ?? ?? ?? ?? ?? E9 ?? ?? ?? ??
+	// Speculation: the number of random number generations (the second value in the function)
+	constexpr std::ptrdiff_t RandomCountOffset = 0x228A698; // signature 8B 41 ?? 89 ?? ?? ?? ?? ?? 8B 41 ?? 89 ?? ?? ?? ?? ?? E9 ?? ?? ?? ??
 
-	// Speculation: an index representing the value to get from the random number generator's internal state
-	constexpr std::ptrdiff_t RandomIndexOffset = 0x2221350; // signature 45 33 DB 44 89 ?? ?? ?? ?? ?? 85 C0 74 ??
+	// Speculation: an index representing the value to get from the random number generator's internal state (the value set to 0 in the function)
+	constexpr std::ptrdiff_t RandomIndexOffset = 0x2264880; // signature 45 33 DB 44 89 ?? ?? ?? ?? ?? 85 C0 74 ??
 
 	// Array of CConsoleCmd::SOldCommandData
-	constexpr std::ptrdiff_t CommandListOffset = 0x1F3D560;
+	constexpr std::ptrdiff_t CommandListOffset = 0x1F7F680;
 	constexpr int CommandCount = 363;
 
 	// Converts a relative offset into a memory address within eu4.exe's address space
