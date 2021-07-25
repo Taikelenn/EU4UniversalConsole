@@ -12,7 +12,7 @@ Europa Universalis IV features an in-game console that allows you to modify the 
 EU4UniversalConsole removes these restrictions by providing a substitute for the in-game console. The word "substitute" means that rather than attempting to enable the game console in normally unsupported game modes, EU4UniversalConsole fetches the command list directly from the game's executable and renders a completely separate console window, with the usual restrictions omitted.
 
 ## Usage
-The latest version of EU4UniversalConsole [can be found here](https://github.com/Taikelenn/EU4UniversalConsole/releases/download/v1.0.1/EU4UniversalConsole.zip). Extract the .zip file anywhere. Then:
+The latest version of EU4UniversalConsole [can be found here](https://github.com/Taikelenn/EU4UniversalConsole/releases/download/v1.0.2/EU4UniversalConsole.zip). Extract the .zip file anywhere. Then:
 1. Launch Europa Universalis IV.
 2. Launch EU4ConsoleInjector.exe. If the injection fails, try launching the executable with administrative rights.
 3. While in game, press the INSERT key to toggle the console.
