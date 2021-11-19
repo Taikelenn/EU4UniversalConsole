@@ -11,23 +11,23 @@ class SOldCommandData;
 
 typedef CCommandResult* (*CommandFunction_t)(CCommandResult*, CStringArray*);
 
-// Offsets updated for EU4 version 1.31.5.2 (3261)
+// Offsets updated for EU4 version 1.32.1.0 (78cb)
 namespace EU4Offsets {
 	// GfxEndSceneDX9 is hooked and used to draw the console.
-	constexpr std::ptrdiff_t EndSceneOffset = 0x1467280; // signature 48 83 EC 28 48 8B 49 08 48 8B 01 FF 90 50 01 00 00
+	constexpr std::ptrdiff_t EndSceneOffset = 0x149A9D0; // signature 48 83 EC 28 48 8B 49 08 48 8B 01 FF 90 50 01 00 00
 
 	// CInGameIdler::Idle is hooked and used to execute console commands from the game's main thread. Executing commands from the EndScene function directly might cause threading issues
-	constexpr std::ptrdiff_t GameIdleOffset = 0x767AA0; // string reference "End game screen from country annexed"
+	constexpr std::ptrdiff_t GameIdleOffset = 0x77D610; // string reference "End game screen from country annexed"
 
 	// Speculation: the number of random number generations (the second value in the function)
-	constexpr std::ptrdiff_t RandomCountOffset = 0x23A6E7C; // signature 8B 41 ?? 89 ?? ?? ?? ?? ?? 8B 41 ?? 89 ?? ?? ?? ?? ?? E9 ?? ?? ?? ??
+	constexpr std::ptrdiff_t RandomCountOffset = 0x23F9AF4; // signature 8B 41 ?? 89 ?? ?? ?? ?? ?? 8B 41 ?? 89 ?? ?? ?? ?? ?? E9 ?? ?? ?? ??
 
 	// Speculation: an index representing the value to get from the random number generator's internal state (the value set to 0 in the function)
-	constexpr std::ptrdiff_t RandomIndexOffset = 0x2380210; // signature 45 33 DB 44 89 ?? ?? ?? ?? ?? 85 C0 74 ??
+	constexpr std::ptrdiff_t RandomIndexOffset = 0x23D2FE0; // signature 45 33 DB 44 89 ?? ?? ?? ?? ?? 85 C0 74 ??
 
 	// Array of CConsoleCmd::SOldCommandData
-	constexpr std::ptrdiff_t CommandListOffset = 0x207D680;
-	constexpr int CommandCount = 369;
+	constexpr std::ptrdiff_t CommandListOffset = 0x20C76F0;
+	constexpr int CommandCount = 371;
 
 	// Converts a relative offset into a memory address within eu4.exe's address space
 	inline void* TranslateOffset(std::ptrdiff_t offset)
